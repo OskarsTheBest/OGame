@@ -1,26 +1,35 @@
-const express = require("express");
-const cors = require("cors");
-const bcrypt = require("bcrypt");
-const { StreamChat } = require("stream-chat");
-const { v4: uuidv4 } = require("uuid");
-const connectDb = require("./db/db");
-const routes = require('./router/router');
-const UserStatsModel = require('./models/userStats');
-const userStatDbFunc = require('./methods/userstatDbFunc');
+// Importing required modules and files
+const express = require("express"); // Importing express module
+const cors = require("cors"); // Importing cors module
+const bcrypt = require("bcrypt"); // Importing bcrypt module for password encryption
+const { StreamChat } = require("stream-chat"); // Importing StreamChat module for chat functionality
+const { v4: uuidv4 } = require("uuid"); // Importing uuidv4 module for generating unique IDs
+const connectDb = require("./db/db"); // Importing connectDb function to connect to the database
+const routes = require('./router/router'); // Importing router module to define API endpoints
+const UserStatsModel = require('./models/userStats'); // Importing UserStatsModel to interact with UserStats collection in database
+const userStatDbFunc = require('./methods/userstatDbFunc'); // Importing userstatDbFunc module to interact with UserStats collection in database
 
-const api_key = "cy5uuk3773vq";
-const api_secret = "d3feydgzfge2etnywjjvwruwpy252qt3ay7bz5y7hadmhwz53aexh33x6mk8s8xd";
+// StreamChat API credentials
+const api_key = "s9hp376zjtsg";
+const api_secret = "5sn5xy7gq2ehsfesrmeyg7huhqkxsvpm7f8dzxg57dvf88r5gjxd39usav46t2zy";
 const serverClient = StreamChat.getInstance(api_key, api_secret);
 
 // Call connectDb function to connect to the database
 connectDb();
 
+// Initialize express app
 const app = express();
+
+// Set up CORS middleware
 app.use(cors());
+
+// Parse incoming JSON requests
 app.use(express.json());
 
+// Use the router module to define API endpoints
 app.use(routes);
 
+// Handle user signup
 app.post("/signup", async (req, res) =>{
   try {
     const {firstName, lastName, username, password} = req.body;
@@ -33,7 +42,7 @@ app.post("/signup", async (req, res) =>{
     res.json(error);
   }
 });
-
+// Handle user login
 app.post("/login", async (req, res) =>{
   try {
     const {username,password} = req.body;
@@ -57,7 +66,7 @@ app.post("/login", async (req, res) =>{
     res.json(error);
   }
 });
-
+//start expressjs server
 app.listen(3001, () => {
   console.log("Server is running on port 3001");
 });
